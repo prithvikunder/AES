@@ -1,4 +1,5 @@
 import pickle
+import jellyfish
 end_of_word = "emp"
 
 def in_trie(trie, word):
@@ -12,3 +13,18 @@ def in_trie(trie, word):
         return True
     else:
         return False
+
+def find_correct_words(incorrect_words, dict_used):
+    correct_words = []
+    for word in incorrect_words:
+        candidates = dict_used.suggest(word)
+        metricval = 99
+        considered_word = ""
+        for eachword in candidates:
+            val = jellyfish.damerau_levenshtein_distance(eachword, word)
+            if val<metricval:
+                metricval = val
+                considered_word = eachword
+        correct_words.append(considered_word)
+    return correct_words
+

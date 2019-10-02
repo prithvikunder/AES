@@ -10,5 +10,5 @@ for each_word in word_list:
         current_dict = current_dict.setdefault(each_letter, {})
     current_dict[end_of_word] = end_of_word
 
-with open("savedict.txt", "wb") as myFile:
+with open("Dictionary/savedict.txt", "wb") as myFile:
     pickle.dump(root, myFile)
