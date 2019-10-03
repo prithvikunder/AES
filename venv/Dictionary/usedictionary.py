@@ -1,5 +1,6 @@
 import pickle
 import jellyfish
+from nltk import pos_tag
 end_of_word = "emp"
 
 def in_trie(trie, word):
@@ -27,4 +28,3 @@ def find_correct_words(incorrect_words, dict_used):
                 considered_word = eachword
         correct_words.append(considered_word)
     return correct_words
-

@@ -1,8 +1,10 @@
 import re
 import pickle
 import enchant
-from nltk import pos_tag, wordnet
+from nltk import pos_tag, wordnet as wn
+from porter2stemmer import Porter2Stemmer
 from Dictionary.usedictionary import in_trie, find_correct_words
+from nltk.corpus import wordnet
 
 def is_number(n):
     try:
@@ -10,6 +12,18 @@ def is_number(n):
         return True
     except ValueError:
         return False
+
+def get_wordnet_pos(tag):
+    if tag.startswith('J'):
+        return wordnet.ADJ
+    elif tag.startswith('V'):
+        return wordnet.VERB
+    elif tag.startswith('N'):
+        return wordnet.NOUN
+    elif tag.startswith('R'):
+        return wordnet.ADV
+    else:
+        return ''
 
 
 f = open("Dictionary\input.txt", "r")
@@ -23,14 +37,15 @@ with open("Dictionary/savedict.txt", "rb") as myFile:
 
 misswords = []
 incorrect_index = []
-
+essay = [el.lower() for el in essay]
 #Checking for words
-for el in essay:
+for i in range(len(essay)):
+    el = essay[i]
     if '@' not in el and is_number(el)==False:
-        isthere = in_trie(trie, el.lower())
+        isthere = in_trie(trie, el)
         if(isthere==False):
-            misswords.append(el.lower())
-            incorrect_index.append(essay.index(el))
+            misswords.append(el)
+            incorrect_index.append(i)
             incorrect+=1
 #print(misswords)
 #Deduct scores here
@@ -50,22 +65,24 @@ else:
 #print(corrected_words)
 for i in range(len(corrected_words)):
     essay[incorrect_index[i]] = corrected_words[i]
-#print(essay)
 #Replacement done
 
 #Remove stopwords and stemming
-print(essay)
-useless_tags = ['DT', 'PRP', 'PRP$', 'EX', 'IN', 'CC', 'CD', 'TO', 'WP$', 'WP', 'UH']
-lemma = wordnet.WordNetLemmatizer()
+useless_tags = ['DT', 'PRP', 'PRP$', 'EX', 'IN', 'CC', 'CD', 'TO', 'WP$', 'WP', 'UH', 'WRB', 'MD']
+lemma = wn.WordNetLemmatizer()
 pos_list = pos_tag(essay)
+print(pos_list)
+incorrect=0
 #print(pos_list)
 for word in pos_list:
+    ind = essay.index(word[0])
     if word[1] in useless_tags:
         essay.remove(word[0])
         #pos_list.remove(word)       #Refined pos list can be used later in grammar check
     else:
-        print(essay[essay.index(word[0])])
-        print(lemma.lemmatize(word[0]))
-        essay[essay.index(word[0])] = lemma.lemmatize(word[0])
-
+        essay[ind] = lemma.lemmatize(word[0], get_wordnet_pos(word[1]))
+        if in_trie(trie, essay[ind])==False and word[1]!='NNP' and word[0][0]!="@":
+            essay.remove(essay[ind])
+            incorrect+=1
 print(essay)
+
