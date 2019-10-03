@@ -5,6 +5,9 @@ from nltk import pos_tag, wordnet as wn
 from porter2stemmer import Porter2Stemmer
 from Dictionary.usedictionary import in_trie, find_correct_words
 from nltk.corpus import wordnet
+import time
+
+start = time.time()
 
 def is_number(n):
     try:
@@ -49,8 +52,12 @@ for i in range(len(essay)):
             incorrect+=1
 #print(misswords)
 #Deduct scores here
-if(incorrect>4):
-    score-=2*incorrect
+if incorrect>0 and incorrect<=4:
+    score-=3
+elif(incorrect>4 and incorrect<=14):
+    score-=2*(incorrect-4)
+else:
+   score-=20
 
 #Find correct replacement for words
 #to_use_dict = input("Enter the dictionary (US or UK): ")
@@ -85,4 +92,6 @@ for word in pos_list:
             essay.remove(essay[ind])
             incorrect+=1
 print(essay)
-
+print(score)
+end = time.time()
+print(end-start)
