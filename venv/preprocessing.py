@@ -93,5 +93,26 @@ for word in pos_list:
             incorrect+=1
 print(essay)
 print(score)
+
+## sentence vectors
+# list to store each sentence
+sentences = []
+line = ''
+# list to store number of letters in each sentence
+word_count = []
+count = 0
+for letter in txt:
+    if letter == '.':
+        sentences.append(line)
+        word_count.append(count)
+        line = ''
+        count = 0
+    else:
+        if letter == ' ':
+            count += 1
+        line += letter
+
+# print(sentences)
+print(word_count)
 end = time.time()
 print(end-start)
