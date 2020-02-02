@@ -18,13 +18,15 @@ def sentence_proportion(essay, score):
 
 
 def check_punctuations_capitalization(pos_list, score):
-    punctuations = ["'", '"', '.', ',', '?', '!']
     mistakes = 0
     hasSeenVerb = False
     sinceFullStop = 0
     appostiveCommaAllowed = False
+    openingQuotes = False
 
     for i in range(len(pos_list)):
+        if sinceFullStop == 0:
+            firstWord = pos_list[i]
         if pos_list[i][1][0] == 'V':
             hasSeenVerb = True
 
@@ -88,11 +90,36 @@ def check_punctuations_capitalization(pos_list, score):
         else:
             sinceFullStop+=1
 
-        '''if pos_list[i][0] == '?':
-            if lastFullStop == -1:
-                if(pos_list[0][0][0]=='W')'''
+        if pos_list[i][0] == '?':
+            isJustified = False
+            if firstWord[1][0] == 'V':
+                isJustified = True
+            elif firstWord[0].lower()=='how' or 'wh' in firstWord[0]:
+                isJustified = True
+            elif pos_list[i-3][0] == ',':
+                isJustified = True
+            elif openingQuotes == True:
+                isJustified = True
+            if isJustified==False:
+                mistakes+=1
+
+        if pos_list[i][0] in ["'", '"']:
+            isJustified = False
+            if openingQuotes == False:
+                openingQuotes = True
+                field = pos_list[i][0]
+            else:
+                openingQuotes = False
+                if pos_list[i][0] == field:
+                    isJustified = True
+                elif pos_list[i-1][0] in ['?', '.']:
+                    isJustified = True
+                elif pos_list[i-1][0] == ',' and pos_list[i+2][1][0]=='V':
+                    isJustified = True
+                if isJustified==False:
+                    mistakes+=1
 
     if pos_list[len(pos_list)-1][0] != '.' or hasSeenVerb == False:
         mistakes += 1
     print('Mistakes: ', mistakes)
-    return score
+    return score - mistakes
