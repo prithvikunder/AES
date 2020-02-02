@@ -22,12 +22,14 @@ def check_punctuations_capitalization(pos_list, score):
     mistakes = 0
     hasSeenVerb = False
     nextCapital = False
+    lastFullStop = -1
 
     for i in range(len(pos_list)):
         if pos_list[i][1][0] == 'V':
             hasSeenVerb = True
 
         if pos_list[i][0] == '.':
+            lastFullStop = i
             #Check for capitalization
             if  i!= len(pos_list)-1:
                 if pos_list[i+1][0].islower() and pos_list[i+1][0][0]!='@':
@@ -52,6 +54,32 @@ def check_punctuations_capitalization(pos_list, score):
 
                 hasSeenVerb = False
                 nextCapital = False
+
+        if pos_list[i][0] == ',':
+            if i==0 or i==len(pos_list)-1:
+                mistakes+=1
+            else:
+                isJustified = False
+                if pos_list[i+1][1] == pos_list[i-1][1] and pos_list[i+1][1][0]=='J':
+                    isJustified = True
+                elif pos_list[i+1][1][0] == pos_list[i-1][1][0] == 'N' and i+1!=len(pos_list)-1:
+                    isJustified = True
+                elif pos_list[i+1][1] == 'CC':
+                    isJustified = True
+                elif pos_list[i+1][0] in ['which', '"']:
+                    isJustified = True
+                elif pos_list[i+1][0][0] == 'W':
+                    isJustified = True
+                elif '.' in pos_list[i-2:i+3][0]:
+                    isJustified = True
+                if(isJustified==False):
+                    print(pos_list[i-2:i+3])
+                    mistakes+=1
+
+        if pos_list[i][0] == '?':
+            if lastFullStop == -1:
+                if(pos_list[0][0][0]=='W')
+
     if pos_list[len(pos_list)-1][0] != '.' or hasSeenVerb == False:
         mistakes += 1
     print('Mistakes: ', mistakes)
