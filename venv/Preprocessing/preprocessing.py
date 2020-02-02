@@ -1,12 +1,12 @@
-from Preprocessing.spellcorrector import spellcheck_and_correct
-from Preprocessing.stopword_removal import remove_stopwords
-from Preprocessing.lemmatization import lemmatize , lemmatize1
-from Preprocessing.checkstructures import sentence_proportion, check_punctuations_capitalization
+from spellcorrector import spellcheck_and_correct
+from stopword_removal import remove_stopwords
+from lemmatization import lemmatize , lemmatize1
+from checkstructures import sentence_proportion, check_punctuations_capitalization
 import time
 
 start = time.time()
 score = 100
-f = open("Dictionary/input.txt", "r")
+f = open("Dictionary/input2.txt", "r")
 txt = f.read()
 f.close()
 essay, score = spellcheck_and_correct(txt, score)
@@ -27,6 +27,7 @@ score = sentence_proportion(essay, score)
 print("Score so far: ", score)
 
 score = check_punctuations_capitalization(pos_list_punctuations, score)
+print(score)
 
 end = time.time()
 print(end-start)

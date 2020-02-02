@@ -1,7 +1,7 @@
 import re
 import pickle
 import enchant
-from Preprocessing.Dictionary.usedictionary import in_trie, find_correct_words
+from Dictionary.usedictionary import in_trie, find_correct_words
 import time
 
 def is_number(n):
