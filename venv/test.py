@@ -1,7 +1,25 @@
-from nltk import pos_tag, wordnet as wn
-lemma = wn.WordNetLemmatizer()
-w1 = lemma.lemmatize('better', 'a')
-w2 = lemma.lemmatize(w1, pos='n')
-w3 = lemma.lemmatize(w2, pos='v')
+import nltk
 
-print(w1, w2, w3)
+grammar = nltk.CFG.fromstring("""
+  S -> NP VP
+  NP -> DT NP1 VP4 | pronoun NP4 | DT NP6 | DT NP7 | propernoun NP3 | noun
+  VP -> V NP | V NP PP
+  PP -> P NP
+  V -> "saw" | "ate" | "walked"
+  Det -> "a" | "an" | "the" | "my"
+  N -> "man" | "dog" | "cat" | "telescope" | "park"
+  P -> "in" | "on" | "by" | "with"
+  noun -> 'NN' | 'NNS' | 'POS'
+  propernoun -> 'NNP' | 'NNPS' | 'POS'
+  DT -> 'DT' | 'WDT'
+  adjective -> 'JJ' | 'JJR' | 'JJS'
+  adverb -> 'RB' | 'RBR' | 'RBS'
+  conjunction -> 'IN' | 'CC'
+  prep -> 'IN'
+  pronoun -> 'PRP' | 'PRP$'
+  """)
+
+sent = "Mary saw Bob".split()
+rd_parser = nltk.RecursiveDescentParser(grammar1).parse(sent)
+result = set(tree.freeze() for tree in rd_parser)
+print(len(result))

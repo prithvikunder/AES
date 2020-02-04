@@ -3,7 +3,7 @@ from nltk.corpus import wordnet, stopwords
 from nltk.tokenize import word_tokenize
 
 def remove_punctuations(essay, pos_list):
-    punctuations = ["'", '"', '.', ',', '?', '!']
+    punctuations = ["'", '"', ',', '?', '!']
     cleaned_essay = []
     pos_list1 = []
     for word, pos_tag in zip(essay, pos_list):

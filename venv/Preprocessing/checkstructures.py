@@ -43,7 +43,7 @@ def check_punctuations_capitalization(pos_list, score):
                     nextCapital = True
 
                 if hasSeenVerb == False or nextCapital == False:
-                    print(pos_list[i+1])
+                    #print(pos_list[i+1])
                     mistakes+=1
                 else:
                     if pos_list[i+1][1] in ['NNP', 'NNPS']:
@@ -76,16 +76,16 @@ def check_punctuations_capitalization(pos_list, score):
                 elif pos_list[i+1][0][1] == 'W':
                     isJustified = True
                 elif sinceFullStop>0 and sinceFullStop<=3 or pos_list[i+1][1] == 'IN':
-                    print(pos_list[i-1][0])
+                    #print(pos_list[i-1][0])
                     isJustified = True
                     appostiveCommaAllowed = True
                 elif appostiveCommaAllowed == True:
-                    print(pos_list[i-1][0])
+                    #print(pos_list[i-1][0])
                     isJustified = True
                     appostiveCommaAllowed = False
 
                 if(isJustified==False):
-                    print(pos_list[i-2:i+3])
+                    #print(pos_list[i-2:i+3])
                     mistakes+=1
         else:
             sinceFullStop+=1
@@ -121,5 +121,5 @@ def check_punctuations_capitalization(pos_list, score):
 
     if pos_list[len(pos_list)-1][0] != '.' or hasSeenVerb == False:
         mistakes += 1
-    print('Mistakes: ', mistakes)
+    #print('Mistakes: ', mistakes)
     return score - mistakes

@@ -2,6 +2,7 @@ from spellcorrector import spellcheck_and_correct
 from stopword_removal import remove_stopwords
 from lemmatization import lemmatize , lemmatize1
 from checkstructures import sentence_proportion, check_punctuations_capitalization
+from grammar3 import grammar_check1, sentence_structure_errors
 import time
 
 start = time.time()
@@ -24,10 +25,16 @@ print("Essay after lemmatization: ", cleaned_essay)
 
 
 score = sentence_proportion(essay, score)
-print("Score so far: ", score)
+print("Score after sentence proportions: ", score)
 
 score = check_punctuations_capitalization(pos_list_punctuations, score)
-print(score)
+print("Score after punctuations checker: ", score)
+
+
+#score = grammar_check1(essay, score)
+sentence_structure_errors(pos_list_grammar, score)
+
+
 
 end = time.time()
 print(end-start)

@@ -17,7 +17,7 @@ client = GrammarBotClient(api_key='KS9C5N3Y') # GrammarBotClient(api_key=my_api_
 # There is only one method to perform the analysis, viz. GrammarBotClient.check
 # method.
 
-text = 'I cant remember how to go their'
+text = 'For example in paragraph two it about @CAPS1 where he and how he that he "Passionate Cuban music.'
 
 # check the text, returns GrammarBotApiResponse object
 res = client.check(text)
